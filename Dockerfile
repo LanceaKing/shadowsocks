@@ -12,10 +12,7 @@ RUN set -ex \
     && apk add --no-cache libsodium-dev mbedtls-dev \
     && pip --no-cache-dir install https://github.com/shadowsocks/shadowsocks/archive/master.zip
 
-COPY optimize.conf /etc/sysctl.d/optimize.conf
-
-CMD sysctl -p /etc/sysctl.d/optimize.conf; \
-    exec ssserver \
+CMD exec ssserver \
       -s $SERVER_ADDR \
       -p $SERVER_PORT \
       -k ${PASSWORD:-$(hostname)} \
