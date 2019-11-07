@@ -1,5 +1,24 @@
 FROM python:alpine
-LABEL maintainer "bomb_k@163.com"
-RUN pip install --no-cache-dir shadowsocks
-RUN sed -i 's/EVP_CIPHER_CTX_cleanup/EVP_CIPHER_CTX_reset/g' /usr/local/lib/python3.7/site-packages/shadowsocks/crypto/openssl.py
-ENTRYPOINT ["/usr/local/bin/ssserver"]
+LABEL maintainer="LanceaKing <bomb_k@163.com>"
+
+ENV SERVER_ADDR 0.0.0.0
+ENV SERVER_PORT 443
+ENV PASSWORD=
+ENV METHOD      chacha20-ietf-poly1305
+ENV TIMEOUT     300
+ENV ARGS=
+
+RUN set -ex \
+    && apk add --no-cache libsodium-dev mbedtls-dev \
+    && pip --no-cache-dir install https://github.com/shadowsocks/shadowsocks/archive/master.zip
+
+COPY optimize.conf /etc/sysctl.d/optimize.conf
+
+CMD sysctl -p /etc/sysctl.d/optimize.conf && \
+    exec ssserver \
+      -s $SERVER_ADDR \
+      -p $SERVER_PORT \
+      -k ${PASSWORD:-$(hostname)} \
+      -m $METHOD \
+      -t $TIMEOUT \
+      $ARGS
