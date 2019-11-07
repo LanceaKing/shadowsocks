@@ -14,9 +14,7 @@ RUN set -ex \
 
 COPY optimize.conf /etc/sysctl.d/optimize.conf
 
-CMD sysctl -p /etc/sysctl.d/optimize.conf && \
-    ulimit -SHn 51200 && \
-    exec ssserver \
+CMD exec ssserver \
       -s $SERVER_ADDR \
       -p $SERVER_PORT \
       -k ${PASSWORD:-$(hostname)} \
