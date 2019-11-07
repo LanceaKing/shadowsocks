@@ -14,7 +14,8 @@ RUN set -ex \
 
 COPY optimize.conf /etc/sysctl.d/optimize.conf
 
-CMD exec ssserver \
+CMD sysctl -p /etc/sysctl.d/optimize.conf; \
+    exec ssserver \
       -s $SERVER_ADDR \
       -p $SERVER_PORT \
       -k ${PASSWORD:-$(hostname)} \
