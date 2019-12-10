@@ -21,7 +21,7 @@ RUN set -ex \
     && mv server_linux_amd64 /usr/local/bin/ktserver \
     && rm -rf /tmp/*
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
+COPY supervisord.conf /etc/supervisor.d/supervisord.conf 
 
 CMD ["/usr/bin/supervisord"]
 
